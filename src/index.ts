@@ -1,5 +1,7 @@
 import Cube from "./RubiksCube";
 
+import { initShaderProgram } from "./util/webgl";
+
 // WebGL main
 function main() : void {
   // Vertex shader program
@@ -24,6 +26,25 @@ function main() : void {
 
   const gl = canvas.getContext("webgl");
   if(!gl) return;
+  
+  // init shader program
+  const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+  if(!shaderProgram) return;
+
+  // Collect all the info needed to use the shader program.
+  // Look up which attribute our shader program is using
+  // for aVertexPosition and look up uniform locations.
+  const programInfo = {
+    program: shaderProgram,
+    attribLocations: {
+      vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+    },
+    uniformLocations: {
+      projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
+      modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+    },
+  };
+
 
   gl.clearColor(0.3, 0.3, 0.3, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
