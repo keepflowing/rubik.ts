@@ -1,9 +1,19 @@
 import Cube from "./RubiksCube";
 
-const cube = new Cube(6);
+const cube = new Cube();
 
 cube.print();
 
-//cube.moveDown(true);
-cube.moveRight(false);
+cube.moveBack(true);
 cube.print();
+
+/*
+cube.moveLeft(true);
+cube.print();
+
+cube.moveLeft(false);
+cube.print();
+
+cube.moveRight(true);
+cube.print();
+*/

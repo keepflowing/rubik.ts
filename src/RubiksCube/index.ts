@@ -3,11 +3,15 @@ import RubiksSide from "./RubiksSide";
 export default class RubiksCube {
   sides: Array<RubiksSide> = [];
 
-  constructor(n: number) {
+  constructor() {
     for(let i = 1; i <= 6; i++) {
-      this.sides.push(new RubiksSide(i, n));
+      this.sides.push(new RubiksSide(i));
     }
     this.sides[1].squares[6] = 0;
+    this.sides[2].squares[0] = 0;
+    this.sides[3].squares[2] = 0;
+    this.sides[0].squares[8] = 0;
+    this.sides[5].squares[8] = 0;
   }
 
   moveUp(prime: boolean, o = 0) : void{
@@ -30,12 +34,70 @@ export default class RubiksCube {
     }
   }
 
-  moveDown(prime: boolean) {
+  moveDown(prime: boolean) : void {
     this.moveUp(prime, 6);
   }
 
-  moveRight(prime: boolean, o = 0) {
+  moveLeft(prime: boolean, o = 0) : void {
+    const temp = [
+      this.sides[5].squares[0 + o], 
+      this.sides[5].squares[3 + o],
+      this.sides[5].squares[6 + o]
+    ];
+
+    o == 0 ? this.sides[1+o].rotate(prime) : this.sides[1+o].rotate(!prime);
+
+    if(prime) {
+      for(let i = 0; i < 3; i++) {
+        this.sides[5].squares[i*3+o] = this.sides[0].squares[i*3+o];
+        this.sides[0].squares[i*3+o] = this.sides[2].squares[i*3+o];
+        this.sides[2].squares[i*3+o] = this.sides[4].squares[i*3+o];
+        this.sides[4].squares[i*3+o] = temp[i];
+      }
+    }
+    else {
+      for(let i = 0; i < 3; i++) {
+        this.sides[5].squares[i*3+o] = this.sides[4].squares[i*3+o];
+        this.sides[4].squares[i*3+o] = this.sides[2].squares[i*3+o];
+        this.sides[2].squares[i*3+o] = this.sides[0].squares[i*3+o];
+        this.sides[0].squares[i*3+o] = temp[i];
+      }
+    }
+  }
+
+  moveRight(prime: boolean, o = 0) : void {
+    this.moveLeft(!prime, 2);
+  }
+
+  moveFront(prime: boolean, o = 0) : void {
+    const temp = o == 0 ? this.sides[0].squares.slice(6,9) 
+      : this.sides[0].squares.slice(0,3);
     
+    const k = o == 0 ? 0 : o-1;
+
+    if(o != o) prime = !prime;
+    this.sides[2+o].rotate(prime);
+
+    if(prime) {
+      for(let i = 0; i < 3; i++) {
+        this.sides[0].squares[6+i-2*o] = this.sides[3].squares[i*3+k];
+        this.sides[3].squares[i*3+k] = this.sides[4].squares[2-i+2*o];
+        this.sides[4].squares[2-i+2*o] = this.sides[1].squares[8-3*i-k];
+        this.sides[1].squares[8-3*i-k] = temp[i];
+      }
+    }
+    else {
+      for(let i = 0; i < 3; i++) {
+        this.sides[0].squares[6+i-2*o] = this.sides[1].squares[8-3*i-k];
+        this.sides[1].squares[8-3*i-k] = this.sides[4].squares[2-i+2*o];
+        this.sides[4].squares[2-i+2*o] = this.sides[3].squares[i*3+k];
+        this.sides[3].squares[i*3+k] = temp[i];
+      }
+    }
+  }
+
+  moveBack(prime: boolean) : void {
+    this.moveFront(prime, 3);
   }
 
   print() {
