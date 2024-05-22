@@ -4,19 +4,44 @@ const cube = new Cube();
 cube.print();
 
 document.addEventListener("keydown", (e) => {
-  if(e.key == "a") cube.moveLeft(false);
-  else if(e.key == "A") cube.moveLeft(true);
-  if(e.key == "d") cube.moveRight(false);
-  else if(e.key == "D") cube.moveRight(true);
-  if(e.key == "w") cube.moveUp(false);
-  else if(e.key == "W") cube.moveUp(true);
-  if(e.key == "s") cube.moveDown(false);
-  else if(e.key == "S") cube.moveDown(true);
-
-  if(e.key == "k") cube.moveFront(false);
-  else if(e.key == "K") cube.moveFront(true);
-  if(e.key == "l") cube.moveBack(false);
-  else if(e.key == "L") cube.moveBack(true);
+  switch(e.key) {
+    case 'a':
+      cube.moveLeft(false);
+      break;
+    case 'A':
+      cube.moveLeft(true);
+      break;
+    case 'd':
+      cube.moveRight(false);
+      break;
+    case 'D':
+      cube.moveRight(false);
+      break;
+    case 'w':
+      cube.moveUp(false);
+      break;
+    case 'W':
+      cube.moveUp(true);
+      break;
+    case 's':
+      cube.moveDown(false);
+      break;
+    case 'S':
+      cube.moveDown(true);
+      break;
+    case 'k':
+      cube.moveFront(false);
+      break;
+    case 'K':
+      cube.moveFront(true);
+      break;
+    case 'l':
+      cube.moveBack(false);
+      break;
+    case 'L':
+      cube.moveBack(true);
+      break;
+  }
 
   console.clear();
   cube.print();
