@@ -1,6 +1,7 @@
 import Cube from "./RubiksCube";
 
-import { initShaderProgram } from "./util/webgl";
+import { initBuffers, initShaderProgram } from "./util/webgl";
+import { drawScene } from "./util/drawScene";
 
 // WebGL main
 function main() : void {
@@ -45,10 +46,12 @@ function main() : void {
     },
   };
 
+  // Here's where we call the routine that builds all the
+  // objects we'll be drawing.
+  const buffers = initBuffers(gl);
 
-  gl.clearColor(0.3, 0.3, 0.3, 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
+  // Draw the scene
+  drawScene(gl, programInfo, buffers);
 }
 
 main();
