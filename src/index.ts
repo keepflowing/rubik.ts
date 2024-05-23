@@ -43,16 +43,41 @@ function main() : void {
   gl.enable(gl.DEPTH_TEST);
   
   // Get the storage location of u_MvpMatrix
-  var u_MvpMatrix = gl.getUniformLocation(shaderProgram, 'u_MvpMatrix');
+  const u_MvpMatrix = gl.getUniformLocation(shaderProgram, 'u_MvpMatrix');
   if (!u_MvpMatrix) { 
     console.log('Failed to get the storage location of u_MvpMatrix');
     return;
   }
 
   // Set the eye point and the viewing volume
-  var mvpMatrix = new Mat4(null);
+  const mvpMatrix = new Mat4(null);
   mvpMatrix.setPerspective(30, canvas.width/canvas.height, 1, 100);
   mvpMatrix.lookAt(3, 3, 7, 0, 0, 0, 0, 1, 0);
+
+  document.addEventListener("keydown", (e) => {
+    switch(e.key) {
+      case "ArrowRight":
+        mvpMatrix.rotate(5.0, 0.0, 1.0, 0.0);
+        break;
+      case "ArrowLeft":
+        mvpMatrix.rotate(-5.0, 0.0, 1.0, 0.0);
+        break;
+      case "ArrowDown":
+        mvpMatrix.rotate(5.0, 1.0, 0.0, 0.0);
+        break;
+      case "ArrowUp":
+        mvpMatrix.rotate(-5.0, 1.0, 0.0, 0.0);
+        break;
+    }
+    // Pass the model view projection matrix to u_MvpMatrix
+    gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
+
+    // Clear color and depth buffer
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Draw the cube
+    gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
+  })
 
   // Pass the model view projection matrix to u_MvpMatrix
   gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
