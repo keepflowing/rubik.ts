@@ -1,3 +1,4 @@
+import { RubiksCube } from "./RubiksCube";
 import { Mat4 } from "./lib/mat4";
 import { draw } from "./util/draw";
 import { initShaders } from "./util/initShaders";
@@ -56,7 +57,9 @@ function main() : void {
   viewProjMatrix.setPerspective(30.0, canvas.width / canvas.height, 1.0, 100.0);
   viewProjMatrix.lookAt(20.0, 10.0, 30.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-  draw(gl, n, viewProjMatrix, u_MvpMatrix);
+  const cube = new RubiksCube(3);
+  
+  draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
 
   document.addEventListener("keydown", (e) => {
     switch(e.key) {
@@ -73,7 +76,7 @@ function main() : void {
         viewProjMatrix.rotate(-5.0, 1.0, 0.0, 0.0);
         break;
     }
-    draw(gl, n, viewProjMatrix, u_MvpMatrix);
+    draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
   })
 }
 

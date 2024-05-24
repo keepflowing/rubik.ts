@@ -1,28 +1,17 @@
+import { RubiksCube } from "../RubiksCube";
 import { Mat4 } from "../lib/mat4";
 
 // Coordinate transformation matrix
 const g_modelMatrix = new Mat4(), g_mvpMatrix = new Mat4();
 
-const pieces = [
-  [-2.1, 2.1, 2.1], [0.0, 2.1, 2.1], [2.1, 2.1, 2.1],
-  [-2.1, 0.0, 2.1], [0.0, 0.0, 2.1], [2.1, 0.0, 2.1],
-  [-2.1, -2.1, 2.1], [0.0, -2.1, 2.1], [2.1, -2.1, 2.1],
-  [-2.1, 2.1, 0.0], [0.0, 2.1, 0.0], [2.1, 2.1, 0.0],
-  [-2.1, 0.0, 0.0], [0.0, 0.0, 0.0], [2.1, 0.0, 0.0],
-  [-2.1, -2.1, 0.0], [0.0, -2.1, 0.0], [2.1, -2.1, 0.0],
-  [-2.1, 2.1, -2.1], [0.0, 2.1, -2.1], [2.1, 2.1, -2.1],
-  [-2.1, 0.0, -2.1], [0.0, 0.0, -2.1], [2.1, 0.0, -2.1],
-  [-2.1, -2.1, -2.1], [0.0, -2.1, -2.1], [2.1, -2.1, -2.1],
-]
-
 export function draw(gl: WebGLRenderingContext, n: number,
-  viewProjMatrix: Mat4, u_MvpMatrix: WebGLUniformLocation) {
+  viewProjMatrix: Mat4, u_MvpMatrix: WebGLUniformLocation, cube: RubiksCube) {
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  for(let i = 0; i < pieces.length; i++) {
-    g_modelMatrix.setTranslate(pieces[i][0], pieces[i][1], pieces[i][2]);
+  cube.pieces.forEach(piece => {
+    g_modelMatrix.setTranslate(piece.position[0], piece.position[1], piece.position[2]);
     drawBox(gl, n, viewProjMatrix, u_MvpMatrix); // Draw
-  }
+  })
 }
 
 function drawBox(gl: WebGLRenderingContext, n: number,
