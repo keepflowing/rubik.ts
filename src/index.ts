@@ -1,4 +1,5 @@
 import { Mat4 } from "./lib/mat4";
+import { draw } from "./util/draw";
 import { initShaders } from "./util/initShaders";
 import { initVertexBuffers } from "./util/initVertexBuffers";
 
@@ -50,43 +51,30 @@ function main() : void {
   }
 
   // Set the eye point and the viewing volume
-  const mvpMatrix = new Mat4(null);
-  mvpMatrix.setPerspective(30, canvas.width/canvas.height, 1, 100);
-  mvpMatrix.lookAt(3, 3, 7, 0, 0, 0, 0, 1, 0);
+  // Calculate the view projection matrix
+  const viewProjMatrix = new Mat4();
+  viewProjMatrix.setPerspective(30.0, canvas.width / canvas.height, 1.0, 100.0);
+  viewProjMatrix.lookAt(20.0, 10.0, 30.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+  draw(gl, n, viewProjMatrix, u_MvpMatrix);
 
   document.addEventListener("keydown", (e) => {
     switch(e.key) {
       case "ArrowRight":
-        mvpMatrix.rotate(5.0, 0.0, 1.0, 0.0);
+        viewProjMatrix.rotate(5.0, 0.0, 1.0, 0.0);
         break;
       case "ArrowLeft":
-        mvpMatrix.rotate(-5.0, 0.0, 1.0, 0.0);
+        viewProjMatrix.rotate(-5.0, 0.0, 1.0, 0.0);
         break;
       case "ArrowDown":
-        mvpMatrix.rotate(5.0, 1.0, 0.0, 0.0);
+        viewProjMatrix.rotate(5.0, 1.0, 0.0, 0.0);
         break;
       case "ArrowUp":
-        mvpMatrix.rotate(-5.0, 1.0, 0.0, 0.0);
+        viewProjMatrix.rotate(-5.0, 1.0, 0.0, 0.0);
         break;
     }
-    // Pass the model view projection matrix to u_MvpMatrix
-    gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
-
-    // Clear color and depth buffer
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    // Draw the cube
-    gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
+    draw(gl, n, viewProjMatrix, u_MvpMatrix);
   })
-
-  // Pass the model view projection matrix to u_MvpMatrix
-  gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
-
-  // Clear color and depth buffer
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-  // Draw the cube
-  gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
 }
 
 main();
