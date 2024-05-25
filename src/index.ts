@@ -75,6 +75,24 @@ function main() : void {
       case "ArrowUp":
         viewProjMatrix.rotate(-5.0, 1.0, 0.0, 0.0);
         break;
+      case "y":
+        cube.rotateX();
+        break;
+      case "Y":
+        cube.rotateX(true);
+        break;
+      case "u":
+        cube.rotateX(false, 1);
+        break;
+      case "U":
+        cube.rotateX(true, 1);
+        break;
+      case "i":
+        cube.rotateX(false, 2);
+        break;
+      case "I":
+        cube.rotateX(true, 2);
+        break;
     }
     draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
   })
