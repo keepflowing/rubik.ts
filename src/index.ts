@@ -62,6 +62,10 @@ function main() : void {
   draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
 
   document.addEventListener("keydown", (e) => {
+    let rotating = false;
+    let mode = 0;
+    let params: Array<any>;
+
     switch(e.key) {
       case "ArrowRight":
         viewProjMatrix.rotate(5.0, 0.0, 1.0, 0.0);
@@ -76,23 +80,53 @@ function main() : void {
         viewProjMatrix.rotate(-5.0, 1.0, 0.0, 0.0);
         break;
       case "y":
-        cube.rotateX();
+        rotating = true;
+        mode = 0;
+        params = [false, 0];
         break;
       case "Y":
-        cube.rotateX(true);
+        rotating = true;
+        mode = 0;
+        params = [true, 0];
         break;
       case "u":
-        cube.rotateX(false, 1);
+        rotating = true;
+        mode = 0;
+        params = [false, 1];
         break;
       case "U":
-        cube.rotateX(true, 1);
+        rotating = true;
+        mode = 0;
+        params = [true, 1];
         break;
       case "i":
-        cube.rotateX(false, 2);
+        rotating = true;
+        mode = 0;
+        params = [false, 2];
         break;
       case "I":
-        cube.rotateX(true, 2);
+        rotating = true;
+        mode = 0;
+        params = [true, 2];
         break;
+      case "z":
+        rotating = true;
+        mode = 1;
+        params = [false, 0];
+        break;
+    }
+    if(rotating && !cube.moving) {
+      cube.moving = true;
+      let turn = 0;
+      const i = setInterval(function() {
+        turn += mode == 0 ? cube.rotateX(params[0], params[1], turn) 
+        : cube.rotateY(params[0], params[1]);
+        draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
+        if(turn == 90) {
+          clearInterval(i);
+          cube.moving = false;
+        }
+      }, 8);
     }
     draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
   })
