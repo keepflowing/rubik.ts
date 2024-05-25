@@ -9,7 +9,7 @@ export function draw(gl: WebGLRenderingContext, n: number,
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   cube.pieces.forEach(piece => {
-    g_modelMatrix.setTranslate(piece.position[0], piece.position[1], piece.position[2]);
+    g_modelMatrix.setTranslate(piece.vec.x, piece.vec.y, piece.vec.z);
     g_modelMatrix.multiply(piece.transformation);
     drawBox(gl, n, viewProjMatrix, u_MvpMatrix); // Draw
   })

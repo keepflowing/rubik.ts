@@ -120,7 +120,7 @@ function main() : void {
       let turn = 0;
       const i = setInterval(function() {
         turn += mode == 0 ? cube.rotateX(params[0], params[1], turn) 
-        : cube.rotateY(params[0], params[1]);
+        : cube.rotateY(params[0], params[1], turn);
         draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
         if(turn == 90) {
           clearInterval(i);
