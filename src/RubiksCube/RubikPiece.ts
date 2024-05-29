@@ -22,18 +22,11 @@ export class RubikPiece {
 
   rotateX(a: number) {
     const r = this.r.x;
-    /*if(this.r.z%180 == 0) {
-      if(this.r.y%180 == 0) this.transformation.rotate(a, 1.0, 0.0, 0.0);
-      else this.transformation.rotate(a, 0.0, 0.0, 1.0);*/
     this.transformation.rotate(a, r.x, r.y, r.z);
   }
 
   rotateY(a: number) {
     const r = this.r.y;
-    /*
-    if(this.r.z%180 == 0) {
-      if(this.r.x%180 == 0) this.transformation.rotate(a, 0.0, 1.0, 0.0);
-      else this.transformation.rotate(a, 0.0, 0.0, 1.0);*/
     this.transformation.rotate(a, r.x, r.y, r.z);
   }
 }

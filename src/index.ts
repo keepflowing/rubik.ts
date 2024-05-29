@@ -79,40 +79,65 @@ function main() : void {
       case "ArrowUp":
         viewProjMatrix.rotate(-5.0, 1.0, 0.0, 0.0);
         break;
-      case "y":
-        rotating = true;
-        mode = 0;
-        params = [false, 0];
-        break;
-      case "Y":
-        rotating = true;
-        mode = 0;
-        params = [true, 0];
-        break;
-      case "u":
-        rotating = true;
-        mode = 0;
-        params = [false, 1];
-        break;
-      case "U":
-        rotating = true;
-        mode = 0;
-        params = [true, 1];
-        break;
       case "i":
         rotating = true;
         mode = 0;
-        params = [false, 2];
+        params = [false, 0];
         break;
       case "I":
         rotating = true;
         mode = 0;
+        params = [true, 0];
+        break;
+      case "o":
+        rotating = true;
+        mode = 0;
+        params = [false, 1];
+        break;
+      case "O":
+        rotating = true;
+        mode = 0;
+        params = [true, 1];
+        break;
+      case "p":
+        rotating = true;
+        mode = 0;
+        params = [false, 2];
+        break;
+      case "P":
+        rotating = true;
+        mode = 0;
         params = [true, 2];
         break;
-      case "z":
+      case "q":
         rotating = true;
         mode = 1;
         params = [false, 0];
+        break;
+      case "Q":
+        rotating = true;
+        mode = 1;
+        params = [true, 0];
+        break;
+      case "w":
+        rotating = true;
+        mode = 1;
+        params = [false, 1];
+        break;
+      case "W":
+        rotating = true;
+        mode = 1;
+        params = [true, 1];
+        break;
+      case "e":
+        rotating = true;
+        mode = 1;
+        params = [false, 2];
+        break;
+      case "E":
+        rotating = true;
+        mode = 1;
+        params = [true, 2];
         break;
     }
     if(rotating && !cube.moving) {

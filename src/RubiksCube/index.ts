@@ -1,4 +1,5 @@
 import { Mat4 } from "../lib/mat4";
+import { Vec3 } from "../lib/vec3";
 import { RubikPiece } from "./RubikPiece";
 
 export class RubiksCube {
@@ -13,11 +14,29 @@ export class RubiksCube {
       this.pieces.push(new RubikPiece(n, size));
     }
 
-    console.log(this.pieces);
+    this.sortPieces();
+  }
+
+  wV(v: Vec3) {
+    return Math.round(v.x)*-1 + Math.round(v.y)*3 + Math.round(v.z)*10;
+  }
+
+  sortPieces() {
+    //const copy = [...this.pieces];
+    /*
+    for(let i = 0; i < copy.length; i++) {
+      console.log(i + ": " + this.wV(copy[i].vec));
+    }*/
+    this.pieces.sort((a, b) => {
+      const aValue = this.wV(a.vec);
+      const bValue = this.wV(b.vec);
+      return bValue - aValue; // For descending order
+    });
   }
 
   rotateX(prime = false, column = 0, turn = 0) {
     let a = prime ? -3 : 3;
+    let n = prime ? -1 : 1;
 
     const rot = new Mat4();
     rot.setRotate(-a, 1, 0, 0);
@@ -29,58 +48,38 @@ export class RubiksCube {
         const rx = this.pieces[i].r.x;
         const ry = this.pieces[i].r.y;
         const rz = this.pieces[i].r.z;
-        this.pieces[i].r.y = new Mat4().setRotate(90, rx.x, rx.y, rx.z).multiplyVector3(ry);
-        this.pieces[i].r.z = new Mat4().setRotate(90, rx.x, rx.y, rx.z).multiplyVector3(rz);
+        this.pieces[i].r.y = new Mat4().setRotate(n*90, rx.x, rx.y, rx.z).multiplyVector3(ry);
+        this.pieces[i].r.z = new Mat4().setRotate(n*90, rx.x, rx.y, rx.z).multiplyVector3(rz);
       }
     }
 
-    if(turn+Math.abs(a) == 90) {
-      const c = column;
-      const copy = [...this.pieces]
-      this.pieces[c] = copy[c+6];
-      this.pieces[c+3] = copy[c+15];
-      this.pieces[c+6] = copy[c+24];
-      this.pieces[c+9] = copy[c+3];
-      this.pieces[c+15] = copy[c+21];
-      this.pieces[c+18] = copy[c];
-      this.pieces[c+21] = copy[c+9];
-      this.pieces[c+24] = copy[c+18];
-    }
+    if(turn+Math.abs(a) == 90) this.sortPieces();
     return Math.abs(a);
   }
 
   rotateY(prime = false, column = 0, turn = 0) {
     let a = prime ? -3 : 3;
+    let n = prime ? -1 : 1;
 
     const rot = new Mat4();
     rot.setRotate(-a, 0, 1, 0);
 
-    for(let r = column; r < 27; r+=9) {
-      for(let i = 0; i < 3; i++) {
-        this.pieces[r+i].rotateY(-a);
-        this.pieces[r+i].vec = rot.multiplyVector3(this.pieces[r+i].vec);
+    for(let i = 0; i < 3; i++) {
+      for(let j = 0; j < 3; j++) {
+        const p = i+3*column+9*j;
+        this.pieces[p].rotateY(-a);
+        this.pieces[p].vec = rot.multiplyVector3(this.pieces[p].vec);
         if(turn+Math.abs(a) == 90) {
-          const rx = this.pieces[r+i].r.x;
-          const ry = this.pieces[r+i].r.y;
-          const rz = this.pieces[r+i].r.z;
-          this.pieces[r+i].r.x = new Mat4().setRotate(90, ry.x, ry.y, ry.z).multiplyVector3(rx);
-          this.pieces[r+i].r.z = new Mat4().setRotate(90, ry.x, ry.y, ry.z).multiplyVector3(rz);
+          const rx = this.pieces[p].r.x;
+          const ry = this.pieces[p].r.y;
+          const rz = this.pieces[p].r.z;
+          this.pieces[p].r.x = new Mat4().setRotate(n*90, ry.x, ry.y, ry.z).multiplyVector3(rx);
+          this.pieces[p].r.z = new Mat4().setRotate(n*90, ry.x, ry.y, ry.z).multiplyVector3(rz);
         }
       }
     }
 
-    if(turn+Math.abs(a) == 90) {
-      const c = column*3;
-      const copy = [...this.pieces]
-      this.pieces[c] = copy[c+2];
-      this.pieces[c+1] = copy[c+11];
-      this.pieces[c+2] = copy[c+20];
-      this.pieces[c+9] = copy[c+1];
-      this.pieces[c+11] = copy[c+19];
-      this.pieces[c+18] = copy[c];
-      this.pieces[c+19] = copy[c+9];
-      this.pieces[c+20] = copy[c+18];
-    }
+    if(turn+Math.abs(a) == 90) this.sortPieces();
     return Math.abs(a);
   }
 }
