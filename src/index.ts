@@ -27,6 +27,8 @@ const FSHADER =
   '  gl_FragColor = v_Color;\n' +
   '}\n';
 
+let globalInterval = 8;
+
 // WebGL main
 function main() : void {
   const canvas = document.querySelector("canvas");
@@ -139,22 +141,75 @@ function main() : void {
         mode = 1;
         params = [true, 2];
         break;
+      case "r":
+        rotating = true;
+        mode = 2;
+        params = [false, 0];
+        break;
+      case "R":
+        rotating = true;
+        mode = 2;
+        params = [true, 0];
+        break;
+      case "u":
+        rotating = true;
+        mode = 2;
+        params = [false, 2];
+        break;
+      case "U":
+        rotating = true;
+        mode = 2;
+        params = [true, 2];
+        break;
+      case "y":
+        rotating = true;
+        mode = 2;
+        params = [false, 1];
+        break;
+      case "Y":
+        rotating = true;
+        mode = 2;
+        params = [true, 1];
+        break;
+      case "b":
+        scrambleCube(cube);
+        break;
     }
+    
     if(rotating && !cube.moving) {
       cube.moving = true;
       let turn = 0;
       const i = setInterval(function() {
         turn += mode == 0 ? cube.rotateX(params[0], params[1], turn) 
-        : cube.rotateY(params[0], params[1], turn);
+        : mode == 1 ? cube.rotateY(params[0], params[1], turn) 
+        : cube.rotateZ(params[0], params[1], turn);
         draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
         if(turn == 90) {
           clearInterval(i);
           cube.moving = false;
         }
-      }, 8);
+      }, globalInterval);
     }
     draw(gl, n, viewProjMatrix, u_MvpMatrix, cube);
   })
 }
 
 main();
+
+function scrambleCube(cube: RubiksCube) {
+  const keys = 
+    ['q', 'w', 'e', 'r', 'y', 'u', 'i', 'o', 'p',
+     'Q', 'W', 'E', 'R', 'Y', 'U', 'I', 'O', 'P'];
+
+  cube.turns = 0;
+  globalInterval = 1;
+
+  const i = setInterval(function() {
+    const x = Math.floor(Math.random() * keys.length + 1);
+    document.dispatchEvent(new KeyboardEvent('keydown', {'key': keys[x]}));
+    if(cube.turns > 30) {
+      clearInterval(i);
+      globalInterval = 8;
+    }
+  }, 200);
+}

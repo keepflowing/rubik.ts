@@ -29,4 +29,9 @@ export class RubikPiece {
     const r = this.r.y;
     this.transformation.rotate(a, r.x, r.y, r.z);
   }
+
+  rotateZ(a: number) {
+    const r = this.r.z;
+    this.transformation.rotate(a, r.x, r.y, r.z);
+  }
 }
